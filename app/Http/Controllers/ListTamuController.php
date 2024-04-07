@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ListTamu;
 use Illuminate\Http\Request;
 
 class ListTamuController extends Controller
@@ -13,7 +14,8 @@ class ListTamuController extends Controller
      */
     public function index()
     {
-        return view('data_tamu.list_tamu');
+        $tamu = ListTamu::all();
+        return view('data_tamu.index', compact('tamu'));
     }
 
     /**
@@ -23,7 +25,7 @@ class ListTamuController extends Controller
      */
     public function create()
     {
-        //
+        return view('data_tamu.create');
     }
 
     /**
@@ -34,7 +36,39 @@ class ListTamuController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //  dd($request->all());
+        $request->validate([
+            'nama' => 'required',
+            'jk' => 'required',
+            'ttl' => 'required',
+            'jabatan' => 'required',
+            'angkatan' => 'required',
+            'alamat' => 'required',
+            'no_tlp' => 'required',
+        ],[
+            'nama.required' => 'Nama tidak boleh kosong',
+            'jk.required' => 'Jenis Kelamin tidak boleh kosong',
+            'ttl.required' => 'Templat Tanggal Lahir tidak boleh kosong',
+            'jabatan.required' => 'Jabatan tidak boleh kosong',
+            'angkatan.required' => 'Angkatan tidak boleh kosong',
+            'alamat.required' => 'Alamat tidak boleh kosong',
+            'no_tlp.required' => 'Nomor telepon tidak boleh kosong',
+        ]); 
+
+      
+        $tamu = [
+            'nama' => $request->nama,
+            'jk' => $request->jk,
+            'ttl' => $request->ttl,
+            'jabatan' => $request->jabatan,
+            'angkatan' => $request->angkatan,
+            'alamat' => $request->alamat,
+            'no_tlp' => $request->no_tlp,
+        ];
+
+        // dd($pelanggan);
+        ListTamu::create($tamu);
+        return redirect()->route('data_tamu.index')->with('success', 'Data Berhasil disimpan');
     }
 
     /**
@@ -56,7 +90,7 @@ class ListTamuController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('data_tamu.edit');
     }
 
     /**
@@ -68,7 +102,37 @@ class ListTamuController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'nama' => 'required',
+            'jk' => 'required',
+            'ttl' => 'required',
+            'jabatan' => 'required',
+            'angkatan' => 'required',
+            'alamat' => 'required',
+            'no_tlp' => 'required',
+        ],[
+            'nama.required' => 'Nama tidak boleh kosong',
+            'jk.required' => 'Jenis Kelamin tidak boleh kosong',
+            'ttl.required' => 'Templat Tanggal Lahir tidak boleh kosong',
+            'jabatan.required' => 'Jabatan tidak boleh kosong',
+            'angkatan.required' => 'Angkatan tidak boleh kosong',
+            'alamat.required' => 'Alamat tidak boleh kosong',
+            'no_tlp.required' => 'Nomor telepon tidak boleh kosong',
+        ]); 
+
+      
+        $tamu = [
+            'nama' => $request->nama,
+            'jk' => $request->jk,
+            'ttl' => $request->ttl,
+            'jabatan' => $request->jabatan,
+            'angkatan' => $request->angkatan,
+            'alamat' => $request->alamat,
+            'no_tlp' => $request->no_tlp,
+        ];
+
+        ListTamu::find($id)->update($tamu);
+        return redirect()->route('data_tamu.index')->with('success', 'Data Berhasil diedit');
     }
 
     /**
